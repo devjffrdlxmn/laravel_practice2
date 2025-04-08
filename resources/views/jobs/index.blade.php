@@ -1,8 +1,10 @@
 <x-layout heading="JOB">
 
-    <h1>Job list</h1>
+
 
     <div class="space-y-4">
+        <h1 class="text-center text-amber-600 text-2xl">Job list</h1>
+        <a href="/jobs/create"  class="rounded-md bg-amber-600 px-3 py-2  text-sm font-semibold text-white shadow-xs hover:bg-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">CREATE A NEW JOB</a>
         @foreach ($jobs as $job )
 
                 <a href="/jobs/{{$job['id']}}" class=" block px-4 py-6 border border-gray-200 rounded-lg">
@@ -12,7 +14,6 @@
                     </div>
 
                 </a>
-
 
         @endforeach
         <div>
