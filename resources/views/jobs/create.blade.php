@@ -1,7 +1,4 @@
 <x-layout heading="Create Job">
-
-   <p>TODO</p>
-
    <form method="POST" action= "/jobs">
     @csrf
     <div class="space-y-12">
