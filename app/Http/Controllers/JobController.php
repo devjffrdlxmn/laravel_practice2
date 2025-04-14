@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class JobController extends Controller
 {
@@ -11,7 +14,7 @@ class JobController extends Controller
     {
 
         $jobs = Job::with('employer')->latest()->simplePaginate(20);
-        return view('jobs.index',['jobs' => $jobs]);
+        return view('jobs.index', ['jobs' => $jobs]);
 
     }
     public function create()
@@ -25,8 +28,8 @@ class JobController extends Controller
     public function store()
     {
         request()->validate([
-            'title' =>['required','min:3'],
-            'salary' =>['required'],
+            'title' => ['required', 'min:3'],
+            'salary' => ['required'],
         ]);
 
 
@@ -40,20 +43,28 @@ class JobController extends Controller
     }
     public function edit(Job $job)
     {
+        Gate::define('edit-job', function (User $user, Job $job) {
+            return $job->employer->user->is($user);
+        });
+
+        if (Auth::guest()) {
+            return redirect('/login');
+        }
+
         return view('jobs.edit', ['job' => $job]);
     }
     public function update(Job $job)
     {
         request()->validate([
-            'title' =>['required','min:3'],
-            'salary' =>['required'],
+            'title' => ['required', 'min:3'],
+            'salary' => ['required'],
         ]);
 
         $job->update([
             'title' => request('title'),
             'salary' => request('salary')
         ]);
-        return redirect('jobs/'. $job->id);
+        return redirect('jobs/' . $job->id);
     }
     public function destroy(Job $job)
     {
